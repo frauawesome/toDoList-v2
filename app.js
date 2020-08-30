@@ -62,14 +62,22 @@ app.get("/", function(req, res) {
 app.post("/", function(req, res){
 
   const itemName = req.body.newItem;
+  const listName = req.body.list;
 
   const item = new Item({
     name: itemName
   });  
 
-  item.save();
-
-  res.redirect("/");
+  if (listName === "Today"){
+    item.save();
+    res.redirect("/");
+  } else {
+    List.findOne({name: listName}, function(err, foundList){
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/" + listName);
+    });
+  } 
 
 });
 
@@ -86,7 +94,7 @@ app.post("/delete", function(req, res){
 
 app.get("/:customListName", function(req, res){
   const customListName = req.params.customListName;
-  const listTitle = customListName.charAt(0).toUpperCase() + customListName.substring(1);
+  // const capitalizedListName = customListName.charAt(0).toUpperCase() + customListName.substring(1);
 
   List.findOne({name: customListName}, function(err, foundList){
     if (!err){
@@ -100,7 +108,7 @@ app.get("/:customListName", function(req, res){
         res.redirect("/" + customListName);
       } else {
         // Show an existing list
-        res.render("list", {listTitle: listTitle, newListItems: foundList.items})
+        res.render("list", {listTitle: customListName, newListItems: foundList.items})
       }
     }
   })    
