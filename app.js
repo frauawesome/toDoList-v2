@@ -68,6 +68,9 @@ app.post("/", function(req, res){
 
   const itemName = req.body.newItem;
   const listName = req.body.list;
+  // const newList = req.body.newList;
+
+  // console.log(newList);
 
   const item = new Item({
     name: itemName
@@ -103,14 +106,37 @@ app.post("/delete", function(req, res){
       }
     });
   }
-
-
 });
 
+// instead of writing in url bar with "get", created a "post" method (above)
 app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
-  // const capitalizedListName = customListName.charAt(0).toUpperCase() + customListName.substring(1);
+  
+  List.findOne({name: customListName}, function(err, foundList){
+    if (!err){
+      if (!foundList){
+        // Create a new list
+        const list = new List({
+          name: customListName,
+          items: defaultItems
+        });
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        // Show an existing list
+        List.find({}, function(err, foundLists){
+          const allLists = foundLists
+          res.render("list", {listTitle: customListName, newListItems: foundList.items, allLists: allLists})
+        });    
+      }
+    }
+  })    
+});
 
+app.post("/customListName", function(req, res){
+  const customListName = _.capitalize(req.body.newList);
+  console.log(customListName);
+  
   List.findOne({name: customListName}, function(err, foundList){
     if (!err){
       if (!foundList){
@@ -139,3 +165,4 @@ app.get("/about", function(req, res){
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
+
