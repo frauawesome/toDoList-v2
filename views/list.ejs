@@ -22,4 +22,15 @@
       </form>
   </div>
 
+  <div class="box">
+    
+    <% allLists.forEach(function(list){ %>
+ 
+          <p><a href="<%= list.name %>"><%=  list.name  %></a></p>
+
+    <% }); %>
+
+  </div>
+
+
 <%- include("footer") -%>

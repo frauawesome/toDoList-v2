@@ -54,7 +54,11 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", {listTitle: "Today", newListItems: foundItems});
+      List.find({}, function(err, foundLists){
+        const allLists = foundLists
+     
+        res.render("list", {listTitle: "Today", newListItems: foundItems, allLists: allLists});
+      });
     }    
   });
   
@@ -119,7 +123,10 @@ app.get("/:customListName", function(req, res){
         res.redirect("/" + customListName);
       } else {
         // Show an existing list
-        res.render("list", {listTitle: customListName, newListItems: foundList.items})
+        List.find({}, function(err, foundLists){
+          const allLists = foundLists
+          res.render("list", {listTitle: customListName, newListItems: foundList.items, allLists: allLists})
+        });    
       }
     }
   })    
