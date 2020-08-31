@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
+require('dotenv').config();
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/toDoListDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-carly:" + process.env.MY_PASSWORD + "@cluster0.drr2g.mongodb.net/toDoListDB?retryWrites=true&w=majority", {useNewUrlParser: true});
 
 const itemsSchema = {
   name: String
@@ -68,9 +69,6 @@ app.post("/", function(req, res){
 
   const itemName = req.body.newItem;
   const listName = req.body.list;
-  // const newList = req.body.newList;
-
-  // console.log(newList);
 
   const item = new Item({
     name: itemName
@@ -126,7 +124,7 @@ app.get("/:customListName", function(req, res){
         // Show an existing list
         List.find({}, function(err, foundLists){
           const allLists = foundLists
-          console.log(allLists);
+          
           res.render("list", {listTitle: customListName, newListItems: foundList.items, allLists: allLists})
         });    
       }
