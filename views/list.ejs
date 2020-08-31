@@ -1,9 +1,36 @@
 <%- include("header") -%>
 
+<!-- navbar (bootstrap) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">GetItDone</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Today <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          All Lists
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <% allLists.forEach(function(list){ %> 
+            <a class="dropdown-item" href="<%= list.name %>"><%=  list.name  %></a>
+          <% }); %> 
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- title of to-do list -->
   <div class="box" id="heading">
     <h1> <%= listTitle %> </h1>
   </div>
 
+<!-- items in to-do list -->
   <div class="box">
     <% newListItems.forEach(function(item){ %>
       <form action="/delete" method="post">
@@ -22,9 +49,11 @@
       </form>
   </div>
 
+  <!-- title for new list -->
   <div class="box" id="heading">
     <h1>Create a New List</h1>
   </div>
+  <!-- submit button for new list -->
   <div class="box">
     <form class="item" action="/customListName" method="post">
       <input type="text" name="newList" placeholder="Name of List" autocomplete="off">
@@ -32,15 +61,7 @@
     </form>
   </div>
 
-  <div class="box">
-    
-    <% allLists.forEach(function(list){ %>
- 
-          <p><a href="<%= list.name %>"><%=  list.name  %></a></p>
-
-    <% }); %>
-
-  </div>
+  
 
 
 <%- include("footer") -%>

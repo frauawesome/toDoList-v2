@@ -126,6 +126,7 @@ app.get("/:customListName", function(req, res){
         // Show an existing list
         List.find({}, function(err, foundLists){
           const allLists = foundLists
+          console.log(allLists);
           res.render("list", {listTitle: customListName, newListItems: foundList.items, allLists: allLists})
         });    
       }
